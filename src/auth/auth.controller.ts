@@ -9,7 +9,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() body: { username: string; password: string }) {
     const user = await this.authService.validateUser(body.username, body.password);
-    if (!user) throw new ForbiddenException();
+    if (!user) throw new ForbiddenException("auth.errors.wrongpassword");
     return this.authService.login(user);
   }
 

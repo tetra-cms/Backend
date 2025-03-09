@@ -11,7 +11,6 @@ model User {
   id        Int      @id @default(autoincrement())
   username     String   @unique
   email String
-  phone String
   password  String
   employeeLvl Int
   createdAt DateTime @default(now())
@@ -31,6 +30,7 @@ model Client {
   fcs String
   city String
   address String
+  phone String
 }
 
 model Category {

@@ -35,7 +35,6 @@ export class AuthService {
         username: userData.username,
         password: hashedPassword,
         email: userData.email,
-        phone: userData.phone,
         employeeLvl: 0,
         loginIp: ipAddress,
         regIp: ipAddress
