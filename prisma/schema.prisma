@@ -12,7 +12,7 @@ model User {
   username     String   @unique
   email String
   password  String
-  employeeLvl Int
+  role Role @default(USER)
   createdAt DateTime @default(now())
   regIp     String
   lastLogin DateTime @updatedAt
@@ -52,4 +52,10 @@ model Product {
 
   categoryId Int
   belongCategory Category @relation("CategoryRelation", fields: [categoryId], references: [id])
+}
+
+enum Role {
+  USER
+  EMPLOYEE
+  ADMIN
 }
