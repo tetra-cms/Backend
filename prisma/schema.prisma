@@ -16,7 +16,6 @@ model User {
   createdAt DateTime @default(now())
   regIp     String
   lastLogin DateTime @updatedAt
-  loginIp     String
 
   clients    Client[]  @relation("ClientRelation")
 }

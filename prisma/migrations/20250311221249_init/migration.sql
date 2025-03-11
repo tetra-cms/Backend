@@ -11,7 +11,6 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "regIp" TEXT NOT NULL,
     "lastLogin" TIMESTAMP(3) NOT NULL,
-    "loginIp" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

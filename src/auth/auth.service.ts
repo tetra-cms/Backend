@@ -37,7 +37,6 @@ export class AuthService {
         password: hashedPassword,
         email: userData.email,
         role: $Enums.Role.USER,
-        loginIp: ipAddress,
         regIp: ipAddress
       },
     });
