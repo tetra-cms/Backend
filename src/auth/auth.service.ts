@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { $Enums } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +36,7 @@ export class AuthService {
         username: userData.username,
         password: hashedPassword,
         email: userData.email,
-        employeeLvl: 0,
+        role: $Enums.Role.USER,
         loginIp: ipAddress,
         regIp: ipAddress
       },
