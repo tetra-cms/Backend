@@ -18,6 +18,20 @@ export class ProductService {
     }
 
     /**
+     * @param {number} categoryId - category unique identifier
+     * @description Returns list of products by selected category
+     * @author fet1sov
+     */
+    async getProductListByCategory(categoryId: number)
+    {
+        return this.prisma.product.findMany({
+            where: {
+                categoryId: categoryId
+            }
+        });
+    }
+
+    /**
      * @param {number} productId - unique product identifier
      * @description Returns list of selling items in platform
      * @author fet1sov
