@@ -45,6 +45,7 @@ model Category {
 model Product {
   id Int @id @default(autoincrement())
 
+  imageUrl String @default("products/no_image.png")
   name String
   description String
   price Int

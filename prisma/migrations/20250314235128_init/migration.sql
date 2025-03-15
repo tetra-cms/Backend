@@ -40,6 +40,7 @@ CREATE TABLE "Category" (
 -- CreateTable
 CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
+    "imageUrl" TEXT NOT NULL DEFAULT 'products/no_image.png',
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
