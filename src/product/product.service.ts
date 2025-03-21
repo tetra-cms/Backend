@@ -38,10 +38,21 @@ export class ProductService {
      */
     async getProductById(productId: number)
     {
-        return this.prisma.product.findUnique({
+        const productInfo = await this.prisma.product.findUnique({
             where: {
                 id: productId
             }
         });
+
+        const categoryInfo = await this.prisma.category.findUnique({
+            where: {
+                id: productInfo?.categoryId
+            }
+        });
+
+        return {
+            ...productInfo,
+            categoryInfo: categoryInfo
+        }
     }   
 }
