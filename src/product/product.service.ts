@@ -44,15 +44,20 @@ export class ProductService {
             }
         });
 
-        const categoryInfo = await this.prisma.category.findUnique({
-            where: {
-                id: productInfo?.categoryId
+        if (productInfo)
+        {
+            const categoryInfo = await this.prisma.category.findUnique({
+                where: {
+                    id: productInfo?.categoryId
+                }
+            });
+    
+            return {
+                ...productInfo,
+                categoryInfo: categoryInfo
             }
-        });
-
-        return {
-            ...productInfo,
-            categoryInfo: categoryInfo
+        } else {
+            return null;
         }
     }   
 }
