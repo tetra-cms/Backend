@@ -9,10 +9,12 @@ import { ProductController } from './product/product.controller';
 import { ProductService } from './product/product.service';
 import { CategoryController } from './category/category.controller';
 import { CategoryService } from './category/category.service';
+import { ContentController } from './content/content.controller';
+import { ContentService } from './content/content.service';
 
 @Module({
   imports: [AuthModule, PrismaModule],
-  controllers: [UserController, ClientController, ProductController, CategoryController],
-  providers: [UserService, ClientService, ProductService, CategoryService],
+  controllers: [UserController, ClientController, ProductController, CategoryController, ContentController],
+  providers: [UserService, ClientService, ProductService, CategoryService, ContentService],
 })
 export class AppModule {}
