@@ -12,7 +12,10 @@ type Product struct {
 
 	Price int
 
-	CategoryID uint
+	Stock int `gorm:"default:-1;not null"`
 
-	Category Category
+	SupplyQuantum uint `gorm:"default:1;not null"`
+
+	CategoryID uint
+	Category   Category
 }

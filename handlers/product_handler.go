@@ -27,7 +27,7 @@ func (h *ProductHandler) GetAll(c *gin.Context) {
 	var products []models.Product
 
 	if err := database.DB.
-		Preload("BelongCategory").
+		Preload("Category").
 		Find(&products).Error; err != nil {
 
 		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
@@ -86,11 +86,13 @@ func (h *ProductHandler) Create(c *gin.Context) {
 	}
 
 	product := models.Product{
-		ImageURL:    req.ImageURL,
-		Name:        req.Name,
-		Description: req.Description,
-		Price:       req.Price,
-		CategoryID:  req.CategoryID,
+		ImageURL:      req.ImageURL,
+		Name:          req.Name,
+		Description:   req.Description,
+		Price:         req.Price,
+		Stock:         req.Stock,
+		SupplyQuantum: req.SupplyQuantum,
+		CategoryID:    req.CategoryID,
 	}
 
 	if err := database.DB.Create(&product).Error; err != nil {
@@ -143,6 +145,8 @@ func (h *ProductHandler) Update(c *gin.Context) {
 	product.Name = req.Name
 	product.Description = req.Description
 	product.Price = req.Price
+	product.Stock = req.Stock
+	product.SupplyQuantum = req.SupplyQuantum
 	product.CategoryID = req.CategoryID
 
 	if err := database.DB.Save(&product).Error; err != nil {

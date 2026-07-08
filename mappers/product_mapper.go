@@ -7,12 +7,14 @@ import (
 
 func ToProductResponse(product *models.Product) dto.ProductResponse {
 	return dto.ProductResponse{
-		ID:          product.ID,
-		ImageURL:    product.ImageURL,
-		Name:        product.Name,
-		Description: product.Description,
-		Price:       product.Price,
-		Category:    ToCategoryResponse(&product.Category),
+		ID:            product.ID,
+		ImageURL:      product.ImageURL,
+		Name:          product.Name,
+		Description:   product.Description,
+		Price:         product.Price,
+		Stock:         product.Stock,
+		SupplyQuantum: product.SupplyQuantum,
+		Category:      ToCategoryResponse(&product.Category),
 	}
 }
 
