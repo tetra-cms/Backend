@@ -9,6 +9,7 @@ import (
 	"tetra-server/config"
 	"tetra-server/database"
 	"tetra-server/dto"
+	mapper "tetra-server/mappers"
 	"tetra-server/middleware"
 	"tetra-server/models"
 
@@ -87,17 +88,42 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	token, err := middleware.GenerateAccessToken(&user, h.cfg)
+	accessToken, err := middleware.GenerateAccessToken(&user, h.cfg)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to generate token",
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Error: "failed to generate access token",
 		})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"token": token,
+	refreshToken, err := middleware.GenerateRefreshToken(&user, h.cfg)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Error: "failed to generate refresh token",
+		})
+		return
+	}
+
+	refresh := models.RefreshToken{
+		UserID: user.ID,
+		Token:  refreshToken,
+		ExpiresAt: time.Now().Add(
+			time.Duration(h.cfg.JWTRefreshExpire) * time.Hour,
+		),
+	}
+
+	if err := database.DB.Create(&refresh).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Error: "failed to save refresh token",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.AuthResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	})
 }
 
@@ -146,18 +172,42 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := middleware.GenerateAccessToken(&user, h.cfg)
+	accessToken, err := middleware.GenerateAccessToken(&user, h.cfg)
 
 	if err != nil {
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to generate token",
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Error: "failed to generate access token",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"token": token,
+	refreshToken, err := middleware.GenerateRefreshToken(&user, h.cfg)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Error: "failed to generate refresh token",
+		})
+		return
+	}
+
+	refresh := models.RefreshToken{
+		UserID: user.ID,
+		Token:  refreshToken,
+		ExpiresAt: time.Now().Add(
+			time.Duration(h.cfg.JWTRefreshExpire) * time.Hour,
+		),
+	}
+
+	if err := database.DB.Create(&refresh).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Error: "failed to save refresh token",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.AuthResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	})
 }
 
@@ -187,9 +237,7 @@ func (h *AuthHandler) Me(c *gin.Context) {
 		return
 	}
 
-	user.Password = ""
-
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, mapper.ToUserResponse(&user))
 }
 
 // Refresh godoc
@@ -284,9 +332,9 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 
 	database.DB.Save(&refresh)
 
-	c.JSON(http.StatusOK, gin.H{
-		"accessToken":  accessToken,
-		"refreshToken": newRefreshToken,
+	c.JSON(http.StatusOK, dto.AuthResponse{
+		AccessToken:  accessToken,
+		RefreshToken: newRefreshToken,
 	})
 }
 

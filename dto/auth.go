@@ -10,3 +10,8 @@ type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+type AuthResponse struct {
+	AccessToken  string `json:"accessToken" example:"eyJhbGciOiJIUzI1NiIs..."`
+	RefreshToken string `json:"refreshToken" example:"eyJhbGciOiJIUzI1NiIs..."`
+}
