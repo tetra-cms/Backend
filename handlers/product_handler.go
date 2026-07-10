@@ -53,7 +53,7 @@ func (h *ProductHandler) GetByID(c *gin.Context) {
 	var product models.Product
 
 	if err := database.DB.
-		Preload("BelongCategory").
+		Preload("Category").
 		First(&product, id).Error; err != nil {
 
 		c.JSON(http.StatusNotFound, dto.ErrorResponse{
